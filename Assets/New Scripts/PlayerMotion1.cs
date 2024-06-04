@@ -18,29 +18,13 @@ public class PlayerMotion1 : StateMachineBehaviour
 
         if (Player1.Health > 0)
         {
-
-            float Horizontal = Input.GetAxis("Horizontal");
-
-
-            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
-            {
-                Horizontal *= 2;
-            }
-
-            if (Horizontal > 0)
-            {
-                Player1.transform.rotation = Quaternion.identity;
-            }
-            if (Horizontal < 0)
-            {
-                Player1.transform.rotation = Quaternion.Euler(0, 180, 0);
-            }
+            float Horizontal = Player1.HorizontalInput;
+            
 
             Horizontal = Mathf.Abs(Horizontal);
-            Player1.transform.Translate(Horizontal * Player1.speed * Time.deltaTime, 0, 0);
             animator.SetFloat("Velocity", Horizontal);
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && Player1.isGrounded)
             {
                 animator.SetTrigger("Jump");
                 Player1.GetComponent<Rigidbody2D>().AddForce(new Vector2(Horizontal, Player1.jumpSpeed), ForceMode2D.Impulse);

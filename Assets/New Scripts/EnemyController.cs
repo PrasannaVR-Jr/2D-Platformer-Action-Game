@@ -20,9 +20,9 @@ public class EnemyController : MonoBehaviour
     GameManager gameManager;
     private void Start()
     {
-         player= GameObject.FindGameObjectWithTag("Player");
+        player= GameObject.FindGameObjectWithTag("Player");
         gameManager = FindObjectOfType<GameManager>();
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 
     private void OnEnable()

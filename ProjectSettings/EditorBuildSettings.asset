@@ -5,16 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/Main.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
-    path: Assets/Tap Counter/TapCounter.unity
-    guid: fec883a9b4a356943b2029ccdb36fcc5
-  - enabled: 1
-    path: Assets/Tap Counter/MainMenu.unity
-    guid: 51005b3c21d8c84428a866a96e0f4475
+    path: Assets/Scenes/Main 1.unity
+    guid: 19035c446e5e6b549b490f28060554cf
   m_configObjects: {}

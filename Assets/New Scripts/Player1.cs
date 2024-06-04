@@ -6,19 +6,28 @@ public class Player1 : MonoBehaviour
 {
     PlayerMotion1 PlayerMotion1;
     public LayerMask enemyLayer;
+    [Header("GroundCheck")]
+    public Transform ReferenceOffset;
+    [SerializeField] Transform GroundTransformRef;
+    public bool isGrounded;
+    public LayerMask GroundLayers;
+    [Header("Player Attributes")]
     public float speed = 3;
     public float jumpSpeed = 10f;
-    public Transform ReferenceOffset;
     public float Health=100;
+    public float MaxHealth;
+    [Header("Other Attributes")]
     public UnityEngine.UI.Slider HealthBar;
     public UnityEngine.UI.Image HealthMaskImage;
-    public float MaxHealth;
     public Transform GridHealth;
     List<GameObject> Hearts=new List<GameObject>();
-    float HealthDiv;
+
     GameManager gameManager;
     int HeartCount;
     public int NumberOfHearts;
+
+    [HideInInspector] public float HorizontalInput;
+
     void Start()
     {
         MaxHealth = Health;
@@ -45,13 +54,30 @@ public class Player1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //3D
-        //Collider[] coll=Physics.OverlapSphere(ReferenceOffset.position, 0.4f,enemyLayer);
-        HealthMaskImage.fillAmount = Health / MaxHealth;
+        HorizontalInput = Input.GetAxis("Horizontal");
 
-        //int NumberofHearts = (int)(Health / HealthDiv);
-        //int TotalHearts = HeartCount - NumberOfHearts;
 
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        {
+            HorizontalInput *= 2;
+        }
+
+        if (HorizontalInput > 0)
+        {
+            transform.rotation = Quaternion.identity;
+        }
+        if (HorizontalInput < 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+        transform.Translate(Mathf.Abs(HorizontalInput) * speed * Time.deltaTime, 0, 0);
+
+        isGrounded = Physics2D.OverlapCircle(GroundTransformRef.position, 0.3f, GroundLayers) != null ? true:false ;
+
+        if(transform.position.y<-8f || Health<=0f)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+        }
         
     }
 
@@ -67,10 +93,12 @@ public class Player1 : MonoBehaviour
 
     public void TakeDamage(float Damage)
     {
+        HealthMaskImage.fillAmount = Health / MaxHealth;
+
         if (Health > 0)
         {
             Health -= Damage;
-            if(HealthBar.gameObject!=null)
+            if(HealthBar!=null)
                 HealthBar.value = Health;
         }
         else
@@ -96,6 +124,11 @@ public class Player1 : MonoBehaviour
 
             string TextAsset = collision.GetComponent<Checkpoint>().EnemyData.ToString();
             ReadTextAsset(TextAsset);
+        }
+
+        if(collision.CompareTag("Finish"))
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
         }
     }
 
